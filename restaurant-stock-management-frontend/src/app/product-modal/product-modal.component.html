@@ -1,0 +1,36 @@
+
+<div class="modal" *ngIf="isVisible">
+    <div class="modal-content">
+      <h2>{{ isEditing ? 'Edit Product' : 'Add Product' }}</h2>
+      <form #productForm="ngForm" (ngSubmit)="onSaveProduct()">
+        <label>
+          Name:
+          <input type="text" [(ngModel)]="currentProduct.name" name="name" required />
+        </label>
+        <div *ngIf="!currentProduct.name" class="error-message">
+          Product name is required.
+        </div>
+        <br><br>
+        <label>
+          Quantity:
+          <input type="number" [(ngModel)]="currentProduct.quantity" name="quantity" required />
+        </label>
+        <div *ngIf="currentProduct.quantity < 0" class="error-message">
+          Quantity cannot be negative.
+        </div>
+        <br><br>
+        <label>
+          Serial Number:
+          <input type="text" [(ngModel)]="currentProduct.serialNumber" name="serialNumber" required />
+        </label>
+        <div *ngIf="!currentProduct.serialNumber" class="error-message">
+          Serial Number is required.
+        </div>
+        <div class="modal-actions">
+          <button type="submit" [disabled]="!productForm.valid">{{ isEditing ? 'Update' : 'Add' }}</button>
+          <button style="background-color: red;" type="button" (click)="onCloseModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,59 @@
+
+<div class="container">
+  <h1>Product Management</h1>
+  <div class="search-add">
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search products" />
+    <button (click)="showAddProductModal()">Add Product</button>
+  </div>
+
+  <ng-container *ngIf="getVisibleProducts().length > 0; else noProductsTemplate">
+    <ng-container *ngIf="filteredProducts().length > 0; else noSearchResultsTemplate">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th (click)="sortBy('name')">Name</th>
+            <th (click)="sortBy('quantity')">Quantity</th>
+            <th (click)="sortBy('serialNumber')">Serial Number</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts()">
+            <td>{{ product.name }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.serialNumber }}</td>
+            <td>
+              <button style="background-color:orange;" (click)="showEditProductModal(product)">Edit</button>
+              <button style="background-color: red;" (click)="deleteProduct(product.id)" [disabled]="product.isDeleted">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-template #noSearchResultsTemplate>
+      <div class="no-results">
+        No products found for the search term "{{ searchTerm }}".
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #noProductsTemplate>
+    <div class="no-results">
+      No products available. Please add a new product.
+    </div>
+  </ng-template>
+
+  <!-- Add/Edit Product Modal -->
+  <app-product-modal
+    [isVisible]="isModalVisible"
+    [isEditing]="isEditing"
+    [currentProduct]="currentProduct"
+    (closeModal)="closeModal()"
+    (saveProduct)="saveProduct()"
+  ></app-product-modal>
+
+  <!-- Feedback Message -->
+  <div *ngIf="feedbackMessage" class="feedback-message">
+    {{ feedbackMessage }}
+  </div>
+</div>
